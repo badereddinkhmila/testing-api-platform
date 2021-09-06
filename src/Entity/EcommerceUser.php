@@ -2,23 +2,31 @@
 
 namespace App\Entity;
 
-use App\Repository\EcommerceUserRepository;
-use DateTimeImmutable;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use App\Repository\EcommerceUserRepository;
+use Doctrine\Common\Collections\Collection;
+use ApiPlatform\Core\Annotation\ApiResource;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 /**
  * @ORM\Entity(repositoryClass=EcommerceUserRepository::class)
+ * @ApiResource(collectionOperations={
+ *       "get"={"normalization_context"={"groups"={"user_read"}}},
+ *       "post"},
+ *       itemOperations={"get"={"normalization_context"={"groups"={"user_details_read"}}},"put","patch","delete"}   
+ *)
  */
+
 class EcommerceUser implements UserInterface, PasswordAuthenticatedUserInterface
 {
     use RessourceID;
     use Timestampable;
     /**
      * @ORM\Column(type="string", length=180, unique=true)
+     * @Groups({"user_read","user_details_read","product_details_read"})
      */
     private $email;
 
@@ -35,6 +43,7 @@ class EcommerceUser implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\OneToMany(targetEntity=Product::class, mappedBy="created_by", orphanRemoval=true)
+     * @Groups({"user_details_read"})
      */
     private $products;
 

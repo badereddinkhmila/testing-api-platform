@@ -2,7 +2,8 @@
 
 return [PHP_INT_MAX, static function () { return \Symfony\Component\VarExporter\Internal\Hydrator::hydrate(
     $o = [
-        clone (\Symfony\Component\VarExporter\Internal\Registry::$prototypes['Doctrine\\ORM\\Mapping\\Entity'] ?? \Symfony\Component\VarExporter\Internal\Registry::p('Doctrine\\ORM\\Mapping\\Entity')),
+        clone (($p = &\Symfony\Component\VarExporter\Internal\Registry::$prototypes)['Doctrine\\ORM\\Mapping\\Entity'] ?? \Symfony\Component\VarExporter\Internal\Registry::p('Doctrine\\ORM\\Mapping\\Entity')),
+        clone ($p['ApiPlatform\\Core\\Annotation\\ApiResource'] ?? \Symfony\Component\VarExporter\Internal\Registry::p('ApiPlatform\\Core\\Annotation\\ApiResource')),
     ],
     null,
     [
@@ -10,10 +11,37 @@ return [PHP_INT_MAX, static function () { return \Symfony\Component\VarExporter\
             'repositoryClass' => [
                 'App\\Repository\\EcommerceUserRepository',
             ],
+            'collectionOperations' => [
+                1 => [
+                    'get' => [
+                        'normalization_context' => [
+                            'groups' => [
+                                'user_read',
+                            ],
+                        ],
+                    ],
+                    'post',
+                ],
+            ],
+            'itemOperations' => [
+                1 => [
+                    'get' => [
+                        'normalization_context' => [
+                            'groups' => [
+                                'user_details_read',
+                            ],
+                        ],
+                    ],
+                    'put',
+                    'patch',
+                    'delete',
+                ],
+            ],
         ],
     ],
     [
         $o[0],
+        $o[1],
     ],
     []
 ); }];
